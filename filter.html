@@ -1,0 +1,45 @@
+<div class="cgFilter">
+  <div class='filterLabel'>Filter By Day :    </div>
+  <button onclick="myFunction()" class="dropbtn">All</button>
+  <div id="myDropdown" class="dropdown-content">
+    <a class='dropdown-item' href="#">Saturday</a>
+    <a class='dropdown-item' href="#">Friday</a>
+    <a class='dropdown-item' href="#">Thursday</a>
+    <a class='dropdown-item' href="#">Wednesday</a>
+    <a class='dropdown-item' href="#">Tuesday</a>
+  </div>
+</div>
+
+<script>
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+      console.log('event clicked is.. ',event.target);
+      console.log('event innerHTML :: ',event.target.innerHTML);
+      if (!event.target.matches('.dropbtn')) {
+        console.log('event matches !.dropbtn');
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        //hide all dropdown items
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+        //if dropdown item is clicked
+        if (event.target.matches(".dropdown-item")) {
+            console.log('matched drop-down item');
+            var dropButton = document.getElementsByClassName('dropbtn')[0];
+            console.log(dropButton);
+            dropButton.innerHTML = event.target.innerHTML;
+            console.log('location array :: ', locations);
+        }
+      }
+    }
+</script>
