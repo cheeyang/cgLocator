@@ -2,6 +2,7 @@
 <div class="cgFilter">
   <button onclick="toggleDropdown()" class="dropbtn">All</button>
   <div id="myDropdown" class="dropdown-content">
+    <a class='dropdown-item' href="#">All</a>
     <a class='dropdown-item' href="#">Saturday</a>
     <a class='dropdown-item' href="#">Friday</a>
     <a class='dropdown-item' href="#">Thursday</a>
@@ -19,23 +20,117 @@
     var cgs = [
         {
             name: 'Chinatown Wednesday Community Group',
+            cong: 2,
             day: 'Wednesday',
             latLong: [1.2865,103.8446],
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a72cba30d9297e8ba9f9ae3/1527213984275/Elliot%26HuiED.jpg?format=750w',
         },
         {
             name: 'Clementi Wednesday Community Group',
+            cong: 2,
             day: 'Wednesday',
             latLong: [1.3162, 103.7649],
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a72cc0f652deac3c38a17f2/1519798201719/CharlesPearlene-1.jpg?format=750w'
 
         },
         {
+            name: 'Bukit Timah Tuesday Community Group',
+            cong: 1,
+            day: 'Thursday',
+            latLong: [1.3294, 103.8021],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b86587788251b19fa25add5/1535531396845/Purch.jpg?format=750w',
+        },
+        {
+            name: 'Ghim Moh Thursday Community Group',
+            cong: 2,
+            day: 'Thursday',
+            latLong: [1.3068, 103.7868],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b8631f66d2a7347b454725c/1535531127609/james-dan.jpg?format=750w'
+        },
+        {
+            name: 'Tiong Bahru Friday Community Group',
+            cong: 2,
+            day: 'Friday',
+            latLong: [1.2865, 103.8270],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b862edd575d1f9926d15b51/1535610092250/RAYMOND.jpg?format=750w'
+        },
+        {
+            name: 'Cantonment Close Thursday Community Group',
+            cong: 1,
+            day: 'Thursday',
+            latLong: [1.2751, 103.8404],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b6416ce0e2e7259c34003cd/1535520477309/IsaacNManwinED.jpg?format=750w'
+        },
+        {
+            name: 'Upper Thomson Saturday Community Group',
+            cong: 3,
+            day: 'Saturday',
+            latLong: [1.3691, 103.8454],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b640d6870a6ad7be9671b0d/1537428217417/Shihao.jpg?format=1500w'
+        },
+        {
+            name: 'Jalan Kayu Saturday Community Group',
+            cong: 3,
+            day: 'Saturday',
+            latLong: [1.3969, 103.8731],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a72ceca0d9297e8ba9ff505/1536918808406/KenAdeline.jpg?format=1500w'
+        },
+        {
+            name: 'Novena (Park Infinia) Wednesday Community Group',
+            cong: 1,
+            day: 'Wednesday',
+            latLong: [1.3145, 103.8429],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5abba9b7562fa7acbf037893/1527216787423/Alvin%26ChristinaLiew-CG.jpg?format=1500w'
+        },
+        {
+            name: 'Orchard Wednesday Community Group',
+            cong: 2,
+            day: 'Wednesday',
+            latLong: [1.3048, 103.8318],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5abba6a90e2e72e0baa3ac94/1522248119255/Scott%26ArleenED.jpg?format=1500w'
+        },
+        {
             name: 'Beauty World Saturday Community Group',
+            cong: 3,
             day: 'Saturday',
             latLong: [1.3416, 103.7757],
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5aa8ec7c652dea04983cda73/1522247337912/Daryl%26SauLingED.jpg?format=750w'
-        }
+        },
+        {
+            name: 'Marymount Friday Community Group',
+            cong: 1,
+            day: 'Friday',
+            latLong: [1.3490, 103.8391],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5aa8e897e2c4839970126cf6/1537251461308/YanLiang%26AnnabelleTanCGED.jpg?format=750w'
+        },
+        {
+            name: 'Bukit Batok Tuesday Community Group',
+            cong: 3,
+            day: 'Tuesday',
+            latLong: [1.3590, 103.7637],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a9624e1c83025c265925f54/1532425181750/ShaunNShenEdited.jpg?format=1000w'
+        },
+        {
+            name: 'Cashew Road Wednesday Community Group',
+            cong: 1,
+            day: 'Wednesday',
+            latLong: [1.3700, 103.7646],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a72c73f652deac3c3898c58/1519789790561/JeremyRuth-2.jpg?format=1000w'
+        },
+        {
+            name: 'Holland Village Wednesday Community Group',
+            cong: 1,
+            day: 'Wednesday',
+            latLong: [1.3111, 103.7961],
+            imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a72c97eec212d13b8c36827/1519789761052/KarrieNFamilyEDITED_0-1.jpg?format=1000w'
+        },
+        // {
+        //     name: '',
+        //     cong: 0,
+        //     day: '',
+        //     latLong: [],
+        //     imgUrl: ''
+        // },
     ]
 
     filteredCgs = cgs.slice(); //clone cg array;
@@ -75,14 +170,18 @@
 
     filterCgs = (selectedDay) => {
         console.log('entered function. selectedDay = ',selectedDay);
-        filteredCgs = cgs.filter((cg)=>(cg.day===selectedDay));
+        if (selectedDay==='All') {
+            filteredCgs = cgs.slice();  //clone unfiltered cg array
+        } else {
+            filteredCgs = cgs.filter((cg)=>(cg.day===selectedDay));
+        }
         console.log('done filtering cgs. filteredCgs :: ', filteredCgs);
         initMap();
     }
 
     function initMap() {
         //map cg info to locations array
-        var locations = filteredCgs.map((cg)=>([`<div class='gmapInfoWrapper' onclick='window.alert("hi")'>
+        var locations = filteredCgs.map((cg)=>([`<div class='gmapInfoWrapper' onclick='window.alert("hi friends")'>
             <img class='infoImage' src='${cg.imgUrl}'/>
             <div>${cg.name}</div>
           </div>`,
@@ -99,6 +198,7 @@
 
         var marker, i;
 
+        console.log(`placing ${locations.length} markers on the map... `)
         for (i = 0; i < locations.length; i++) {
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(locations[i][1], locations[i][2]),
