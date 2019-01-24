@@ -13,9 +13,7 @@
 
 <div id="gmap"></div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_uZpkOodLnCyfSLSNJHYahWzpaQKS258&callback=initMap"
-    async defer></script>
-<script type="text/javascript">
+<script type="text/javascript"> // State Objects
     //define all cgs here
     var cgs = [
         {
@@ -254,6 +252,8 @@
 
     filteredCgs = cgs.slice(); //clone cg array;
 
+</script>
+<script type="text/javascript">    //FUNCTION DEFINITIONS
     /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */
     function toggleDropdown() {
@@ -302,7 +302,7 @@
         //map cg info to locations array
         var locations = filteredCgs.map((cg)=>([`<div class='gmapInfoWrapper' onclick='window.alert("hi friends")'>
             <img class='infoImage' src='${cg.imgUrl}'/>
-            <div>${cg.name}</div>
+            <div class='infoText'>${cg.name}</div>
           </div>`,
           cg.latLong[0],
           cg.latLong[1]]));
@@ -340,3 +340,6 @@
         }
     }
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_uZpkOodLnCyfSLSNJHYahWzpaQKS258&callback=initMap"
+    async defer></script>

@@ -1,8 +1,15 @@
 //styles for embedded google maps
-#gmap {
+@media only screen and (max-width:500px) {
+  #gmap {
+    height: 300px;
+  }
+}
+@media only screen and (min-width: 500px) {
+  #gmap {
   height: 600px;
   width: 100%;
   background-color: lightgrey;
+  }
 }
 .gmapInfoWrapper {
   position: relative;
@@ -10,13 +17,21 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 150px;
-  width: 120px;
+  padding-right: -50px;
 }
 .gmapInfoWrapper .infoImage {
   height: 80px;
   resize-mode: both;
   background-color: black;
+}
+.gmapInfoWrapper .infoText {
+  width: 120px;
+  text-align: center;
+}
+@media only screen and (max-width:500px) {
+  .gmapInfoWrapper .infoImage {
+    height: 60px;
+  }
 }
 
 
@@ -25,7 +40,6 @@
 .cgFilter {
   position: relative;
   display: inline-block;
-  width: 400px;
   margin-bottom: 20px;
 }
 .filterLabel {
@@ -41,13 +55,24 @@
   font-size: 12px;
   border: none;
   cursor: pointer;
-  width: 200px;
+  width: 160px;
+}
+.dropbtn:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #fff;
 }
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
   transition: border-radius 1s,background-color 1s;
   border-radius: 5px;
   background-color: gray;
+  outline: none;
 }
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
