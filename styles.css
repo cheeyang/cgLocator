@@ -1,7 +1,7 @@
 //styles for embedded google maps
 @media only screen and (max-width:500px) {
   #gmap {
-    height: 300px;
+    height: 400px;
   }
 }
 @media only screen and (min-width: 500px) {
@@ -17,7 +17,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-right: -50px;
+  cursor: pointer;
 }
 .gmapInfoWrapper .infoImage {
   height: 80px;
@@ -94,3 +94,28 @@
 .dropdown-content a:hover {background-color: #ddd}
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
+
+//more cg info modal
+.moreCgInfoModal {
+  display: block;
+  height:0;
+  overflow:hidden;
+  width: 90%;
+  transform: translate(-50%,0);
+  left: 50%;
+  transition: height 1s;
+  position: absolute;
+  bottom: 20px;
+  background-color: white;
+  background: linear-gradient(to bottom, #FFF 0%, #EEE 100%);
+}
+.moreCgInfoModal.show {
+  display: block;
+  height: 100px;
+}
+.cgModalContent {
+  display: grid;
+  grid-template-rows: 50px 50px;
+  grid-template-columns: 33.33% 33.33% 33.33%;
+  box-shadow: 0px -3px 5px grey;
+}

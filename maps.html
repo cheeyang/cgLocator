@@ -12,6 +12,7 @@
 </div>
 
 <div id="gmap"></div>
+<div class='moreCgInfoModal'>MORE INFO</div>
 
 <script type="text/javascript"> // State Objects
     //define all cgs here
@@ -19,7 +20,7 @@
         {
             name: 'Bukit Timah Tuesday Community Group',
             cong: 1,
-            day: 'Thursday',
+            day: 'Tuesday',
             latLong: [1.3294, 103.8021],
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b86587788251b19fa25add5/1535531396845/Purch.jpg?format=750w',
         },
@@ -250,9 +251,18 @@
         }
     ]
 
-    filteredCgs = cgs.slice(); //clone cg array;
+    var filteredCgs = cgs.slice(); //clone cg array;
+
+    var showMoreDetails = false;
+
+    var modalElement = document.getElementsByClassName('moreCgInfoModal')[0];
+
+    var selectedCg = 0;
 
 </script>
+
+
+
 <script type="text/javascript">    //FUNCTION DEFINITIONS
     /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */
@@ -266,15 +276,13 @@
       var selectedDay = event.target.innerHTML;
       console.log('event innerHTML :: ',selectedDay);
       if (!event.target.matches('.dropbtn')) {
-        console.log('event matches !.dropbtn');
+        console.log('item clicked is NOT the filter button');
         var dropdowns = document.getElementsByClassName("dropdown-content");
         var i;
         //hide all dropdown items
         for (i = 0; i < dropdowns.length; i++) {
           var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
+          openDropdown.classList.remove('show');
         }
         //if dropdown item is clicked
         if (event.target.matches(".dropdown-item")) {
@@ -285,6 +293,7 @@
             filterCgs(selectedDay);
         }
       }
+      // if (modalElement.classList.contains(''))
     }
 
     filterCgs = (selectedDay) => {
@@ -298,9 +307,23 @@
         initMap();
     }
 
+    displayMoreInfo = (index) => {
+        console.log(`displaying more info for cg #${index}....`);
+        const cg = filteredCgs[index];
+        modalElement.classList.add('show');//bring up modal if hidden
+        //if already showing, do not close.
+        //execute this regardless
+        modalElement.innerHTML =
+            `<div class='cgModalContent'>
+                <span>${cg.name}</span>
+                <span>${cg.day}</span>
+                <span>${cg.cong}</span>
+            </div>`;
+    }
+
     function initMap() {
         //map cg info to locations array
-        var locations = filteredCgs.map((cg)=>([`<div class='gmapInfoWrapper' onclick='window.alert("hi friends")'>
+        var locations = filteredCgs.map((cg,index)=>([`<div class='gmapInfoWrapper' onclick='displayMoreInfo(${index})'>
             <img class='infoImage' src='${cg.imgUrl}'/>
             <div class='infoText'>${cg.name}</div>
           </div>`,
@@ -308,7 +331,7 @@
           cg.latLong[1]]));
 
         var map = new google.maps.Map(document.getElementById('gmap'), {
-          zoom: 12,
+          zoom: 11.5,
           center: new google.maps.LatLng(1.3521, 103.8198),
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
@@ -325,16 +348,21 @@
           });
 
           google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-              infowindow.setContent(locations[i][0]);
-              infowindow.open(map, marker);
+            isInfoWindowOpen = (iWindow) => {
+              var mapRef = iWindow.getMap();
+              return (mapRef !== null && typeof mapRef !== "undefined");
             }
-          })(marker, i));
-
-          google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
             return function() {
-              infowindow.setContent(locations[i][0]);
-              infowindow.open(map, marker);
+              if (selectedCg===i) { //if infoWindow is open and same marker is clicked
+                  infowindow.close();
+                  modalElement.classList.remove('show');
+              } else {
+                  infowindow.setContent(locations[i][0]);
+                  infowindow.open(map, marker);
+                  modalElement.classList.add('show');
+                  displayMoreInfo(i);
+              }
+              selectedCg = i;
             }
           })(marker, i));
         }
