@@ -336,7 +336,11 @@
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-        var infowindow = new google.maps.InfoWindow();
+        var infoWindow = new google.maps.InfoWindow();
+        google.maps.event.addListener(infoWindow,'closeclick',function(){
+           modalElement.classList.remove('show');
+           // remove the modal on clicking the close button
+        });
 
         var marker, i;
 
@@ -354,11 +358,11 @@
             }
             return function() {
               if (selectedCg===i) { //if infoWindow is open and same marker is clicked
-                  infowindow.close();
+                  infoWindow.close();
                   modalElement.classList.remove('show');
               } else {
-                  infowindow.setContent(locations[i][0]);
-                  infowindow.open(map, marker);
+                  infoWindow.setContent(locations[i][0]);
+                  infoWindow.open(map, marker);
                   modalElement.classList.add('show');
                   displayMoreInfo(i);
               }
