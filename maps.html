@@ -21,6 +21,8 @@
             name: 'Bukit Timah Tuesday Community Group',
             cong: 1,
             day: 'Tuesday',
+            timeslot: '7.45pm - 9.30pm',
+            kids: false,
             latLong: [1.3294, 103.8021],
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5b86587788251b19fa25add5/1535531396845/Purch.jpg?format=750w',
         },
@@ -60,7 +62,7 @@
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a72ceca0d9297e8ba9ff505/1536918808406/KenAdeline.jpg?format=1500w'
         },
         {
-            name: 'Novena (Park Infinia) Wednesday Community Group',
+            name: 'Novena (Park Infinia) Community Group',
             cong: 1,
             day: 'Wednesday',
             latLong: [1.3145, 103.8429],
@@ -91,6 +93,8 @@
             name: 'Bukit Batok Tuesday Community Group',
             cong: 3,
             day: 'Tuesday',
+            time: '8.00pm - 9.30pm',
+            kids: false,
             latLong: [1.3590, 103.7637],
             imgUrl: 'https://static1.squarespace.com/static/5a266b4c90badea30b86b672/5a72c67e8165f596c6e6a9b5/5a9624e1c83025c265925f54/1532425181750/ShaunNShenEdited.jpg?format=1000w'
         },
@@ -173,7 +177,7 @@
 
         },
         {
-            name: 'Novena (Appleton View) Wednesday Community Group',
+            name: 'Novena (Appleton View) Community Group',
             cong: 2,
             day: 'Wednesday',
             latLong: [1.3200,103.8412],
@@ -315,9 +319,11 @@
         //execute this regardless
         modalElement.innerHTML =
             `<div class='cgModalContent'>
-                <span>${cg.name}</span>
+                <span class='cgName'>${cg.name}</span>
                 <span>${cg.day}</span>
-                <span>${cg.cong}</span>
+                <span>${cg.timeslot}</span>
+                <span>Kids-friendly : ${cg.kids?'yes':'no'}</span>
+                <span>${cg.cong} Congregation</span>
             </div>`;
     }
 
@@ -357,7 +363,7 @@
               return (mapRef !== null && typeof mapRef !== "undefined");
             }
             return function() {
-              if (selectedCg===i) { //if infoWindow is open and same marker is clicked
+              if (isInfoWindowOpen(infoWindow) && selectedCg===i) { //if infoWindow is open and same marker is clicked
                   infoWindow.close();
                   modalElement.classList.remove('show');
               } else {
