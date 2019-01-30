@@ -1,7 +1,7 @@
 //styles for embedded google maps
 @media only screen and (max-width:500px) {
   #gmap {
-    height: 400px;
+    height: 430px;
   }
 }
 @media only screen and (min-width: 500px) {
@@ -9,6 +9,14 @@
   height: 600px;
   width: 100%;
   background-color: lightgrey;
+  }
+}
+@media only screen and (min-width: 1201px) {
+  #gmap {
+  	width: 80vw;
+   	position: relative;
+    left: 50%;
+    transform: translate(-50%,0);
   }
 }
 .gmapInfoWrapper {
@@ -100,7 +108,7 @@
   display: block;
   height:0;
   overflow:hidden;
-  width: 92%;
+  width: 90%;
   transform: translate(-50%,0);
   left: 50%;
   transition: height 1s;
@@ -109,19 +117,27 @@
   background-color: white;
   background: linear-gradient(to bottom, #FFF 0%, #EEE 100%);
 }
+@media only screen and (min-width: 1201px) {
+  .moreCgInfoModal {
+  	width: 50vw;
+  }
+}
 .moreCgInfoModal.show {
   display: block;
-  height: 100px;
+  height: 120px;
 }
 .cgModalContent {
   display: grid;
   grid-template-rows: repeat(4,1fr);
   grid-template-columns: 1fr 1fr;
   box-shadow: 0px -3px 5px grey;
+  padding: 10px;
+  font-size: 12px;
 }
 .cgName {
   grid-column-start: 1;
   grid-column-end: 3;
   background-color: #EEE;
   font-weight: bold;
+  font-size: 14px;
 }
