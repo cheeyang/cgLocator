@@ -1,15 +1,17 @@
-<div class='filterLabel'>Filter By Day :</div>
-<div class="cgFilter">
-  <button onclick="toggleDropdown()" class="dropbtn">All</button>
-  <div id="myDropdown" class="dropdown-content">
-    <a class='dropdown-item' href="#">All</a>
-    <a class='dropdown-item' href="#">Tuesday</a>
-    <a class='dropdown-item' href="#">Wednesday</a>
-    <a class='dropdown-item' href="#">Thursday</a>
-    <a class='dropdown-item' href="#">Friday</a>
-    <a class='dropdown-item' href="#">Saturday</a>
-  </div>
-</div>
+<span class='filterWrapper'>
+    <div class='filterLabel'>Filter By Day :</div>
+    <div class="cgFilter">
+      <button onclick="toggleDropdown()" class="dropbtn">All</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a class='dropdown-item' href="#">All</a>
+        <a class='dropdown-item' href="#">Tuesday</a>
+        <a class='dropdown-item' href="#">Wednesday</a>
+        <a class='dropdown-item' href="#">Thursday</a>
+        <a class='dropdown-item' href="#">Friday</a>
+        <a class='dropdown-item' href="#">Saturday</a>
+      </div>
+    </div>
+</span>
 
 <div id="gmap"></div>
 <div class='moreCgInfoModal'>MORE INFO</div>
@@ -523,6 +525,27 @@
       document.getElementById("myDropdown").classList.toggle("show");
     }
 
+    window.onscroll = (event) => {
+        let y = window.scrollY;
+        console.log('Y scroll position is : ',window.scrollY);
+
+        if (window.innerWidth<500) {
+            let mainPageElement = document.getElementById('collection-5c46e2d18a922d3a72f7e0ac');
+            mainPageElement.style = "margin-top: 104px; margin-bottom: 0px;";
+        }
+
+        let headerElement = document.getElementsByClassName('Mobile-bar Mobile-bar--top')[0];
+        let logoElement = document.getElementsByClassName('Mobile-bar-branding-logo')[0];
+
+        if (y>5) {
+            headerElement.classList.add('reducedHeightMobileBar');
+            logoElement.classList.add('reducedSizeLogo');
+        } else {
+            headerElement.classList.remove('reducedHeightMobileBar');
+            logoElement.classList.remove('reducedSizeLogo');
+        }
+    }
+
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function(event) {
       console.log('event clicked is.. ',event.target);
@@ -602,7 +625,8 @@
         var map = new google.maps.Map(document.getElementById('gmap'), {
           zoom: 11.5,
           center: new google.maps.LatLng(1.3521, 103.8198),
-          mapTypeId: google.maps.MapTypeId.ROADMAP
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          // disableDefaultUI: true
         });
 
         var infoWindow = new google.maps.InfoWindow();

@@ -1,7 +1,7 @@
 //styles for embedded google maps
 @media only screen and (max-width:500px) {
   #gmap {
-    height: 430px;
+    height: 520px;
   }
 }
 @media only screen and (min-width: 500px) {
@@ -50,6 +50,24 @@
   display: inline-block;
   margin-bottom: 20px;
 }
+@keyframes flicker {
+  from {
+      background-color: transparent;
+  }
+  to {
+      background-color: #fccca7;
+  }
+}
+.filterWrapper {
+    animation: flicker;
+    padding: 15px;
+    animation-direction: alternate;
+    animation-duration: 0.75s;
+    animation-iteration-count: 6;
+    animation-fill-mode: forwards;
+    animation-delay: 1.5s;
+}
+
 .filterLabel {
   text-align: right;
   display: inline-block;
@@ -140,4 +158,17 @@
   background-color: #EEE;
   font-weight: bold;
   font-size: 14px;
+}
+
+.Mobile-bar.Mobile-bar--top.reducedHeightMobileBar {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.Mobile-bar-branding-logo {
+    transition: width 0.5s, height 0.5s, padding 0.5s;
+}
+.reducedSizeLogo {
+    width: 50px;
+    resize: both;
 }
