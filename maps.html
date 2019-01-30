@@ -552,7 +552,7 @@
       var selectedDay = event.target.innerHTML;
       console.log('event innerHTML :: ',selectedDay);
       if (!event.target.matches('.dropbtn')) {
-        console.log('item clicked is NOT the filter button');
+        console.log('item clicked is outside filter buttons');
         var dropdowns = document.getElementsByClassName("dropdown-content");
         var i;
         //hide all dropdown items
@@ -623,8 +623,8 @@
           cg.latLong[1]]));
 
         var map = new google.maps.Map(document.getElementById('gmap'), {
-          zoom: 11.5,
-          center: new google.maps.LatLng(1.3521, 103.8198),
+          zoom: 11.2,
+          center: new google.maps.LatLng(1.3421, 103.8448),
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           // disableDefaultUI: true
         });

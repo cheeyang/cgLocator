@@ -1,18 +1,33 @@
 //styles for embedded google maps
-@media only screen and (max-width:500px) {
+//iphone se 5
+@media only screen and (max-height:575px) {
   #gmap {
-    height: 520px;
+    height: 400px;
   }
 }
+//iphone 6s
+@media only screen and (min-height:576px) {
+  #gmap {
+    height: 500px;
+  }
+}
+//iphone 6s+
+@media only screen and (min-height:700px) {
+  #gmap {
+    height: 78vh;
+  }
+}
+
 @media only screen and (min-width: 500px) {
   #gmap {
-  height: 600px;
+  height: 80vh;
   width: 100%;
   background-color: lightgrey;
   }
 }
-@media only screen and (min-width: 1201px) {
+@media only screen and (min-width: 1000px) {
   #gmap {
+    height: 80vh;
   	width: 80vw;
    	position: relative;
     left: 50%;
@@ -55,7 +70,7 @@
       background-color: transparent;
   }
   to {
-      background-color: #fccca7;
+      background-color: #cfefdf;
   }
 }
 .filterWrapper {
