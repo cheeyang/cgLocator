@@ -15,8 +15,15 @@
 
 <div id="gmap"></div>
 <div class='moreCgInfoModal'>MORE INFO</div>
+<div class='legend'></div>
 
-<script type="text/javascript"> // State Objects
+<script type="text/javascript"> // Config
+    //set marker colors here
+    var markerColors={
+        cg: {text:"Community Group",outer:'#000',inner:'#8ae7ea'},
+        women: {text:"Women's Group",outer: '#000',inner:'#58916b'},
+        men: {text:"Men's Group",outer:'#000',inner:'#444040'}
+    };
     //define all cgs here
     var cgs = [
         {
@@ -319,6 +326,7 @@
         },
         {
             name: `Men's Discipleship`,
+            type: 'men',
             cong: 0,
             day: 'Every Second Thursday',
             time: '7.50am - 8.50am',
@@ -473,6 +481,7 @@
         },
         {
             name: `River Valley Mum's Group`,
+            type: 'women',
             cong: 0,
             day: 'Wednesday',
             time: '9.30am - 11.30am',
@@ -484,6 +493,7 @@
         },
         {
             name: `Yew Tee / Toh Yi Mum's Group`,
+            type: 'women',
             cong: 0,
             day: '?',
             time: '9.00am - 11.30am',
@@ -495,6 +505,7 @@
         },
         {
             name: `Bukit Timah Mum's Group`,
+            type: 'women',
             cong: 0,
             day: 'Wednesday',
             time: '9.30am - 11.30am',
@@ -530,7 +541,7 @@
         console.log('Y scroll position is : ',window.scrollY);
 
         if (window.innerWidth<500) {
-            let mainPageElement = document.getElementById('collection-5c46e2d18a922d3a72f7e0ac');
+            let mainPageElement = document.getElementById('collection-5c5261502b6a2803e8c32762');
             mainPageElement.style = "margin-top: 104px; margin-bottom: 0px;";
         }
 
@@ -577,10 +588,11 @@
         if (selectedDay==='All') {
             filteredCgs = cgs.slice();  //clone unfiltered cg array
         } else {
-            filteredCgs = cgs.filter((cg)=>(cg.day===selectedDay));
+            filteredCgs = cgs.filter((cg)=>(cg.day.includes(selectedDay)));
         }
         console.log('done filtering cgs. filteredCgs :: ', filteredCgs);
         initMap();
+        modalElement.classList.remove('show');
     }
 
     congreSelector = (cong) => {
@@ -613,6 +625,16 @@
             </a>`;
     }
 
+    getZoom = () => {
+        if (window.innerWidth<350) {    //iphone se 5
+            return 10.9;
+        } else if (window.innerWidth<500) {     //mid-sized phones
+            return 11.1;
+        } else {    //ipad or desktop
+            return 12;
+        }
+    }
+
     function initMap() {
         //map cg info to locations array
         var locations = filteredCgs.map((cg,index)=>([`<a href='${cg.page}' class='gmapInfoWrapper' onclick='displayMoreInfo(${index})'>
@@ -620,12 +642,13 @@
             <div class='infoText'>${cg.name}</div>
           </a>`,
           cg.latLong[0],
-          cg.latLong[1]]));
+          cg.latLong[1],cg.type]));
 
         var map = new google.maps.Map(document.getElementById('gmap'), {
-          zoom: 11.2,
+          zoom: getZoom(),
           center: new google.maps.LatLng(1.3421, 103.8448),
           mapTypeId: google.maps.MapTypeId.ROADMAP,
+          styles: gMapStyles
           // disableDefaultUI: true
         });
 
@@ -637,11 +660,37 @@
 
         var marker, i;
 
+        getPin = (type='cg') => {
+            const pinSvgString = `<svg height="48" id="map-marker" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><defs><style>
+                  .vi-outer {
+                    fill: ${markerColors[type].outer};
+                    fill-rule: evenodd;
+                    stroke: #777;
+                    stroke-width: 1;
+                  }
+
+                  .vi-accent {
+                    stroke: #fff;
+                    stroke-linecap: round;
+                    stroke-width: 0;
+                  }
+
+                  .vi-accent {
+                    fill: ${markerColors[type].inner};
+                  }
+                </style></defs><path class="vi-primary" d="M24,6c7.732,0,14,5.641,14,12.6C38,29.963,24,42,24,42S10,30.064,10,18.6C10,11.641,16.268,6,24,6Z"/><circle class="vi-accent" cx="24" cy="20" r="7"/></svg>`;
+            const pinSvgIcon = {
+                url: `data:image/svg+xml;utf-8,${pinSvgString}`
+            }
+            return pinSvgIcon;
+        }
+
         console.log(`placing ${locations.length} markers on the map... `)
         for (i = 0; i < locations.length; i++) {
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-            map: map
+            map: map,
+            icon: getPin(locations[i][3]),
           });
 
           google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -663,7 +712,194 @@
             }
           })(marker, i));
         }
+
+        if (!document.getElementsByClassName('color')[0]) {
+            initLegend();
+        }
     }
+
+    initLegend = () => {
+        const legendNode = document.getElementsByClassName('legend')[0]
+        Object.keys(markerColors).forEach((type)=>{
+            const legendItem = document.createElement('div');
+            legendItem.classList.add('legendItem');
+            const c = document.createElement('div');
+            c.classList.add('color');
+            c.style = `border: 7px solid ${markerColors[type].inner};`;
+            console.log('added color to span');
+            legendItem.appendChild(c);
+            const t = document.createTextNode(markerColors[type].text);
+            console.log('created text node');
+            const text = document.createElement('span');
+            text.classList.add('legendText');
+            text.appendChild(t);
+            legendItem.appendChild(text);
+            legendNode.appendChild(legendItem);
+        })
+    }
+</script>
+
+<script type='text/javascript'>
+    var gMapStyles = [
+          {
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#f5f5f5"
+              }
+            ]
+          },
+          {
+            "elementType": "labels.icon",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#616161"
+              }
+            ]
+          },
+          {
+            "elementType": "labels.text.stroke",
+            "stylers": [
+              {
+                "color": "#f5f5f5"
+              }
+            ]
+          },
+          {
+            "featureType": "administrative.land_parcel",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#bdbdbd"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#eeeeee"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#757575"
+              }
+            ]
+          },
+          {
+            "featureType": "poi.park",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#e5e5e5"
+              }
+            ]
+          },
+          {
+            "featureType": "poi.park",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#9e9e9e"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#ffffff"
+              }
+            ]
+          },
+          {
+            "featureType": "road.arterial",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#757575"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#dadada"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#616161"
+              }
+            ]
+          },
+          {
+            "featureType": "road.local",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#9e9e9e"
+              }
+            ]
+          },
+          {
+            "featureType": "transit.line",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#e5e5e5"
+              }
+            ]
+          },
+          {
+            "featureType": "transit.station",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#eeeeee"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "color": "#c9c9c9"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [
+              {
+                "color": "#9e9e9e"
+              }
+            ]
+          }
+        ]
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_uZpkOodLnCyfSLSNJHYahWzpaQKS258&callback=initMap"

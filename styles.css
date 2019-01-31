@@ -2,30 +2,23 @@
 //iphone se 5
 @media only screen and (max-height:575px) {
   #gmap {
-    height: 400px;
+    height: 380px;
   }
 }
 //iphone 6s
 @media only screen and (min-height:576px) {
   #gmap {
-    height: 500px;
+    height: 480px;
   }
 }
-//iphone 6s+
+//iphone 6s+ and up
 @media only screen and (min-height:700px) {
   #gmap {
-    height: 78vh;
+    height: 72vh;
   }
 }
-
+//ipad + desktop
 @media only screen and (min-width: 500px) {
-  #gmap {
-  height: 80vh;
-  width: 100%;
-  background-color: lightgrey;
-  }
-}
-@media only screen and (min-width: 1000px) {
   #gmap {
     height: 80vh;
   	width: 80vw;
@@ -146,7 +139,7 @@
   left: 50%;
   transition: height 1s;
   position: absolute;
-  bottom: 20px;
+  bottom: 50px;
   background-color: white;
   background: linear-gradient(to bottom, #FFF 0%, #EEE 100%);
 }
@@ -186,4 +179,29 @@
 .reducedSizeLogo {
     width: 50px;
     resize: both;
+}
+
+.legend {
+    height: 30px;
+}
+@media only screen and (min-width:500px) {
+    .legend {
+        position: relative;
+        right: 0;
+        width: 80vw;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%,0);
+    }
+}
+.legendItem {
+    display: inline-block;
+    margin-right: 20px;
+}
+.color {
+    border-radius: 50%;
+    height: 0px;
+    width: 0px;
+    display: inline-block;
+    margin-right: 5px;
 }
