@@ -24,6 +24,9 @@
         women: {text:"Women's Group",outer: '#000',inner:'#58916b'},
         men: {text:"Men's Group",outer:'#000',inner:'#444040'}
     };
+</script>
+
+<script type="text/javascript">
     //define all cgs here
     var cgs = [
         {
@@ -516,209 +519,34 @@
             page: 'https://www.rhc.org.sg/new-blog-1/bukit-timah-mums'
         }
     ]
-
-    var filteredCgs = cgs.slice(); //clone cg array;
-
-    var showMoreDetails = false;
-
-    var modalElement = document.getElementsByClassName('moreCgInfoModal')[0];
-
-    var selectedCg = 0;
-
 </script>
 
-
+<script type="text/javascript">
+    //Component variables
+    var filteredCgs = cgs.slice(); //clone cg array;
+    var map = null;
+    var infoWindow = null;
+    var locations = [];
+    var showMoreDetails = false;
+    var modalElement = document.getElementsByClassName('moreCgInfoModal')[0];
+    var selectedCg = 0;
+</script>
 
 <script type="text/javascript">    //FUNCTION DEFINITIONS
-    /* When the user clicks on the button,
-    toggle between hiding and showing the dropdown content */
-    function toggleDropdown() {
-      document.getElementById("myDropdown").classList.toggle("show");
-    }
 
-    window.onscroll = (event) => {
-        let y = window.scrollY;
-        console.log('Y scroll position is : ',window.scrollY);
-
-        if (window.innerWidth<500) {
-            let mainPageElement = document.getElementById('collection-5c5261502b6a2803e8c32762');
-            mainPageElement.style = "margin-top: 104px; margin-bottom: 0px;";
-        }
-
-        let headerElement = document.getElementsByClassName('Mobile-bar Mobile-bar--top')[0];
-        let logoElement = document.getElementsByClassName('Mobile-bar-branding-logo')[0];
-
-        if (y>5) {
-            headerElement.classList.add('reducedHeightMobileBar');
-            logoElement.classList.add('reducedSizeLogo');
-        } else {
-            headerElement.classList.remove('reducedHeightMobileBar');
-            logoElement.classList.remove('reducedSizeLogo');
-        }
-    }
-
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function(event) {
-      console.log('event clicked is.. ',event.target);
-      var selectedDay = event.target.innerHTML;
-      console.log('event innerHTML :: ',selectedDay);
-      if (!event.target.matches('.dropbtn')) {
-        console.log('item clicked is outside filter buttons');
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        //hide all dropdown items
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          openDropdown.classList.remove('show');
-        }
-        //if dropdown item is clicked
-        if (event.target.matches(".dropdown-item")) {
-            console.log('matched drop-down item');
-            var dropButton = document.getElementsByClassName('dropbtn')[0];
-            console.log(dropButton);
-            dropButton.innerHTML = selectedDay;
-            filterCgs(selectedDay);
-        }
-      }
-      // if (modalElement.classList.contains(''))
-    }
-
-    filterCgs = (selectedDay) => {
-        console.log('entered function. selectedDay = ',selectedDay);
-        if (selectedDay==='All') {
-            filteredCgs = cgs.slice();  //clone unfiltered cg array
-        } else {
-            filteredCgs = cgs.filter((cg)=>(cg.day.includes(selectedDay)));
-        }
-        console.log('done filtering cgs. filteredCgs :: ', filteredCgs);
-        initMap();
-        modalElement.classList.remove('show');
-    }
-
-    congreSelector = (cong) => {
-        switch (cong) {
-            case 1:
-                return '1st Congregation';
-            case 2:
-                return '2nd Congregation';
-            case 3:
-                return '3rd Congregation';
-            default:
-                return 'All Congregations';
-        }
-    }
-
-    displayMoreInfo = (index) => {
-        console.log(`displaying more info for cg #${index}....`);
-        const cg = filteredCgs[index];
-        modalElement.classList.add('show');//bring up modal if hidden
-        //if already showing, do not close.
-        //execute this regardless
-        modalElement.innerHTML =
-            `<a href=${cg.page} class='cgModalContent'>
-                <span class='cgName'>${cg.name}</span>
-                <span>${cg.day}</span>
-                <span>${cg.time}</span>
-                <span>Kid-friendly : ${cg.kids?'yes':'no'}</span>
-                <span>${congreSelector(cg.cong)}</span>
-                <span>Nearest MRT: ${cg.mrt}</span>
-            </a>`;
-    }
-
-    getZoom = () => {
-        if (window.innerWidth<350) {    //iphone se 5
-            return 10.9;
-        } else if (window.innerWidth<500) {     //mid-sized phones
-            return 11.1;
-        } else {    //ipad or desktop
-            return 12;
-        }
+    function initMaster() {
+      initMap();
+      initLegend();
     }
 
     function initMap() {
-        //map cg info to locations array
-        var locations = filteredCgs.map((cg,index)=>([`<a href='${cg.page}' class='gmapInfoWrapper' onclick='displayMoreInfo(${index})'>
-            <img class='infoImage' src='${cg.imgUrl}'/>
-            <div class='infoText'>${cg.name}</div>
-          </a>`,
-          cg.latLong[0],
-          cg.latLong[1],cg.type]));
-
-        var map = new google.maps.Map(document.getElementById('gmap'), {
-          zoom: getZoom(),
-          center: new google.maps.LatLng(1.3421, 103.8448),
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          styles: gMapStyles
-          // disableDefaultUI: true
-        });
-
-        var infoWindow = new google.maps.InfoWindow();
-        google.maps.event.addListener(infoWindow,'closeclick',function(){
-           modalElement.classList.remove('show');
-           // remove the modal on clicking the close button
-        });
-
-        var marker, i;
-
-        getPin = (type='cg') => {
-            const pinSvgString = `<svg height="48" id="map-marker" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><defs><style>
-                  .vi-outer {
-                    fill: ${markerColors[type].outer};
-                    fill-rule: evenodd;
-                    stroke: #777;
-                    stroke-width: 1;
-                  }
-
-                  .vi-accent {
-                    stroke: #fff;
-                    stroke-linecap: round;
-                    stroke-width: 0;
-                  }
-
-                  .vi-accent {
-                    fill: ${markerColors[type].inner};
-                  }
-                </style></defs><path class="vi-primary" d="M24,6c7.732,0,14,5.641,14,12.6C38,29.963,24,42,24,42S10,30.064,10,18.6C10,11.641,16.268,6,24,6Z"/><circle class="vi-accent" cx="24" cy="20" r="7"/></svg>`;
-            const pinSvgIcon = {
-                url: `data:image/svg+xml;utf-8,${pinSvgString}`
-            }
-            return pinSvgIcon;
-        }
-
-        console.log(`placing ${locations.length} markers on the map... `)
-        for (i = 0; i < locations.length; i++) {
-          marker = new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-            map: map,
-            icon: getPin(locations[i][3]),
-          });
-
-          google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            isInfoWindowOpen = (iWindow) => {
-              var mapRef = iWindow.getMap();
-              return (mapRef !== null && typeof mapRef !== "undefined");
-            }
-            return function() {
-              if (isInfoWindowOpen(infoWindow) && selectedCg===i) { //if infoWindow is open and same marker is clicked
-                  infoWindow.close();
-                  modalElement.classList.remove('show');
-              } else {
-                  infoWindow.setContent(locations[i][0]);
-                  infoWindow.open(map, marker);
-                  modalElement.classList.add('show');
-                  displayMoreInfo(i);
-              }
-              selectedCg = i;
-            }
-          })(marker, i));
-        }
-
-        if (!document.getElementsByClassName('color')[0]) {
-            initLegend();
-        }
+        _loadLocations();
+        _loadMap();
+        _loadInfoWindow();
+        _loadMarkers(locations);
     }
 
-    initLegend = () => {
+    function initLegend(){
         const legendNode = document.getElementsByClassName('legend')[0]
         Object.keys(markerColors).forEach((type)=>{
             const legendItem = document.createElement('div');
@@ -736,6 +564,185 @@
             legendItem.appendChild(text);
             legendNode.appendChild(legendItem);
         })
+    }
+
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function toggleDropdown() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    //On User Scroll
+    window.onscroll = (event) => {
+        _reduceMobileBarHeight();
+        if (window.innerWidth<500) {
+            let mainPageElement = document.getElementById('collection-5c5261502b6a2803e8c32762');
+            mainPageElement.style = "margin-top: 104px !important; margin-bottom: 0px !important;";
+        }
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+      var selectedDay = event.target.innerHTML;
+      if (!event.target.matches('.dropbtn')) {
+        //if user clicks anywhere outside dropdown button, hide dropdown menu
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          openDropdown.classList.remove('show');
+        }
+      }
+      if (event.target.matches(".dropdown-item")) {
+          // drop-down item clicked
+          var dropButton = document.getElementsByClassName('dropbtn')[0];
+          dropButton.innerHTML = selectedDay;
+          _filterCgs(selectedDay);
+      }
+    }
+
+    _loadLocations = () => {
+        //map filteredcg info into locations array
+        locations = filteredCgs.map((cg,index)=>([`<a href='${cg.page}' class='gmapInfoWrapper' onclick='_displayMoreInfo(${index})'>
+            <img class='infoImage' src='${cg.imgUrl}'/>
+            <div class='infoText'>${cg.name}</div>
+          </a>`,
+          cg.latLong[0],
+          cg.latLong[1],cg.type]));
+    }
+    _loadMap = () => {
+        map = new google.maps.Map(document.getElementById('gmap'), {
+          zoom: _getZoom(),
+          center: new google.maps.LatLng(1.3421, 103.8448),
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          styles: gMapStyles
+          // disableDefaultUI: true
+        });
+    }
+    _loadInfoWindow = () => {
+        infoWindow = new google.maps.InfoWindow();
+        google.maps.event.addListener(infoWindow,'closeclick',function(){
+           modalElement.classList.remove('show');
+           // remove the modal on clicking the close button
+        });
+    }
+    _loadMarkers = () => {
+        var marker, i;
+        for (i = 0; i < locations.length; i++) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map,
+            icon: __getCustomPin(locations[i][3]),
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            isInfoWindowOpen = (iWindow) => {
+              var mapRef = iWindow.getMap();
+              return (mapRef !== null && typeof mapRef !== "undefined");
+            }
+            return function() {
+              if (isInfoWindowOpen(infoWindow) && selectedCg===i) { //if infoWindow is open and same marker is clicked
+                  infoWindow.close();
+                  modalElement.classList.remove('show');
+              } else {
+                  infoWindow.setContent(locations[i][0]);
+                  infoWindow.open(map, marker);
+                  modalElement.classList.add('show');
+                  _displayMoreInfo(i);
+              }
+              selectedCg = i;
+            }
+          })(marker, i));
+        }
+    }
+    __getCustomPin = (type='cg') => {
+        const pinSvgString = `<svg height="48" id="map-marker" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><defs><style>
+              .vi-outer {
+                fill: ${markerColors[type].outer};
+                fill-rule: evenodd;
+                stroke: #777;
+                stroke-width: 1;
+              }
+
+              .vi-accent {
+                stroke: #fff;
+                stroke-linecap: round;
+                stroke-width: 0;
+              }
+
+              .vi-accent {
+                fill: ${markerColors[type].inner};
+              }
+            </style></defs><path class="vi-primary" d="M24,6c7.732,0,14,5.641,14,12.6C38,29.963,24,42,24,42S10,30.064,10,18.6C10,11.641,16.268,6,24,6Z"/><circle class="vi-accent" cx="24" cy="20" r="7"/></svg>`;
+        const pinSvgIcon = {
+            url: `data:image/svg+xml;utf-8,${pinSvgString}`
+        }
+        return pinSvgIcon;
+    }
+
+    //Display Popup From Below
+    _displayMoreInfo = (index) => {
+        console.log(`displaying more info for cg #${index}....`);
+        const cg = filteredCgs[index];
+        modalElement.classList.add('show');//bring up modal if hidden
+        //if already showing, do not close.
+        //execute this regardless
+        modalElement.innerHTML =
+            `<a href=${cg.page} class='cgModalContent'>
+                <span class='cgName'>${cg.name}</span>
+                <span>${cg.day}</span>
+                <span>${cg.time}</span>
+                <span>Kid-friendly : ${cg.kids?'yes':'no'}</span>
+                <span>${_congreSelector(cg.cong)}</span>
+                <span>Nearest MRT: ${cg.mrt}</span>
+            </a>`;
+    }
+
+    _reduceMobileBarHeight = () => {
+        let y = window.scrollY;
+        let headerElement = document.getElementsByClassName('Mobile-bar Mobile-bar--top')[0];
+        let logoElement = document.getElementsByClassName('Mobile-bar-branding-logo')[0];
+
+        if (y>5) {
+            headerElement.classList.add('reducedHeightMobileBar');
+            logoElement.classList.add('reducedSizeLogo');
+        } else {
+            headerElement.classList.remove('reducedHeightMobileBar');
+            logoElement.classList.remove('reducedSizeLogo');
+        }
+    }
+
+    _filterCgs = (selectedDay) => {
+        console.log('entered function. selectedDay = ',selectedDay);
+        if (selectedDay==='All') {
+            filteredCgs = cgs.slice();  //clone unfiltered cg array
+        } else {
+            filteredCgs = cgs.filter((cg)=>(cg.day.includes(selectedDay)));
+        }
+        console.log('done filtering cgs. filteredCgs :: ', filteredCgs);
+        initMap();
+        modalElement.classList.remove('show');
+    }
+
+    _congreSelector = (cong) => {
+        switch (cong) {
+            case 1:
+                return '1st Congregation';
+            case 2:
+                return '2nd Congregation';
+            case 3:
+                return '3rd Congregation';
+            default:
+                return 'All Congregations';
+        }
+    }
+
+    _getZoom = () => {
+        if (window.innerWidth<350) {    //iphone se 5
+            return 10.9;
+        } else if (window.innerWidth<500) {     //mid-sized phones
+            return 11.1;
+        } else {    //ipad or desktop
+            return 12;
+        }
     }
 </script>
 
@@ -902,5 +909,5 @@
         ]
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_uZpkOodLnCyfSLSNJHYahWzpaQKS258&callback=initMap"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_uZpkOodLnCyfSLSNJHYahWzpaQKS258&callback=initMaster"
     async defer></script>
