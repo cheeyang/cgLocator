@@ -18,11 +18,15 @@
 <div class='legend'></div>
 
 <script type="text/javascript"> // Config
-    //set marker colors here
+    const ua = navigator.userAgent.toLowerCase();
+    const isAndroid = ua.indexOf("android") > -1;
+    // set marker colors here
+    // Hexadecimal values e.g. #123456 do not work for android Chrome >> use named colors instead e.g. 'lightgray','cyan'...
+    // Named colors can be found at : https://css-tricks.com/snippets/css/named-colors-and-hex-equivalents/
     var markerColors={
-        cg: {text:"Community Group",outer:'#000',inner:'#8ae7ea'},
-        women: {text:"Women's Group",outer: '#000',inner:'#58916b'},
-        men: {text:"Men's Group",outer:'#000',inner:'#444040'}
+        cg: {text:"Community Group",outer:'black',inner: isAndroid ? 'aqua' : '#8ae7ea'},
+        women: {text:"Women's Group",outer: 'black',inner: isAndroid ? 'rosybrown' : '#58916b'},
+        men: {text:"Men's Group",outer:'black',inner: isAndroid ? 'saddlebrown' : '#444040'}
     };
 </script>
 
@@ -658,12 +662,12 @@
               .vi-outer {
                 fill: ${markerColors[type].outer};
                 fill-rule: evenodd;
-                stroke: #777;
+                stroke: gray
                 stroke-width: 1;
               }
 
               .vi-accent {
-                stroke: #fff;
+                stroke: white;
                 stroke-linecap: round;
                 stroke-width: 0;
               }
